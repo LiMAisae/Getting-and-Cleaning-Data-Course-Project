@@ -1,6 +1,3 @@
-setwd("~/data_study/GettingAndCleaningData/UCI HAR Dataset/")
-
-
 
 path_rf <- getwd()
 files<-list.files(path_rf, recursive=TRUE)
