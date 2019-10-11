@@ -1,4 +1,3 @@
-
 path_rf <- getwd()
 files<-list.files(path_rf, recursive=TRUE)
 activity_labels<-read.table("activity_labels.txt")
@@ -28,11 +27,14 @@ columnsToKeep <- grepl("subject|activity|mean|std", names(Data))
 Data <- Data[, columnsToKeep]
 Data$activity <- factor(Data$activity, levels = activity_labels[, 1], labels = activity_labels[, 2])
 
+names(Data)<-gsub("[\\(\\)-]", "",names(Data))
+
 names(Data)<-gsub("^t", "time", names(Data))
 names(Data)<-gsub("^f", "frequency", names(Data))
 names(Data)<-gsub("Acc", "Accelerometer", names(Data))
 names(Data)<-gsub("Gyro", "Gyroscope", names(Data))
 names(Data)<-gsub("Mag", "Magnitude", names(Data))
+names(Data)<-gsub("mean","Mean", names(Data))
 names(Data)<-gsub("std", "StandardDeviation", names(Data))
 
 library(dplyr)
