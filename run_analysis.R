@@ -1,3 +1,4 @@
+# Load the raw data set
 path_rf <- getwd()
 files<-list.files(path_rf, recursive=TRUE)
 activity_labels<-read.table("activity_labels.txt")
@@ -10,7 +11,7 @@ dataSubjectTest  <- read.table(file.path(path_rf, "test" , "subject_test.txt"),h
 
 dataFeaturesTest  <- read.table(file.path(path_rf, "test" , "X_test.txt" ),header = FALSE)
 dataFeaturesTrain <- read.table(file.path(path_rf, "train", "X_train.txt"),header = FALSE)
-
+# Merge the training and test datasets
 dataSubject <- rbind(dataSubjectTrain, dataSubjectTest)
 dataActivity<- rbind(dataActivityTrain, dataActivityTest)
 dataFeatures<- rbind(dataFeaturesTrain, dataFeaturesTest)
@@ -21,12 +22,12 @@ dataFeaturesNames <- read.table(file.path(path_rf, "features.txt"),head=FALSE)
 names(dataFeatures)<- dataFeaturesNames[,2]
 
 Data <- cbind(dataFeatures,dataSubject, dataActivity)
-
+# Extracts only the measurements on the mean and standard deviation for each measuremen
 columnsToKeep <- grepl("subject|activity|mean|std", names(Data))
-
+#Uses descriptive activity names to name the activities in the data set
 Data <- Data[, columnsToKeep]
 Data$activity <- factor(Data$activity, levels = activity_labels[, 1], labels = activity_labels[, 2])
-
+# Rename the variables with descriptive name
 names(Data)<-gsub("[\\(\\)-]", "",names(Data))
 
 names(Data)<-gsub("^t", "time", names(Data))
@@ -42,7 +43,7 @@ DataMeans <- Data %>%
   group_by(subject, activity) %>%
   summarise_each(funs(mean))
 
-# output to file "tidy_data.txt"
+# output the tidy dataset to "tidy_data.txt"
 write.table(DataMeans, "tidy_data.txt", row.names = FALSE, 
             quote = FALSE)
 
